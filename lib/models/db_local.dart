@@ -1,9 +1,10 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-class DBlocal {
+class DBLocal {
   final String table, dbName;
-  DBlocal({
+
+  DBLocal({
     this.dbName = "banco.db",
     required this.table,
   });
@@ -14,7 +15,7 @@ class DBlocal {
     return await openDatabase(path, version: 1,
         onCreate: (Database db, int version) async {
       await db.execute(
-          "CREATE TABLE $table (id PRIMARY KEY AUTOINCREMENT,name TEXT NOT NULL,email TEXT NOT NULL)");
+          "CREATE TABLE $table (id PRIMARY KEY AUTOINCREMENT,name TEXT NOT NULL, email TEXT NOT NULL)");
     });
   }
 }

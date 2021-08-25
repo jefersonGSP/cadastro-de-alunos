@@ -3,5 +3,6 @@ import 'package:cadastro_alunos/models/irepository.dart';
 import 'package:cadastro_alunos/models/students.dart';
 
 abstract class StudentRepository implements IRepository<Student> {
-  late DBlocal dbLocal;
+  //Fontes de dados
+  late DBLocal dbLocal;
 }

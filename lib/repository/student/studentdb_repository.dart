@@ -5,85 +5,94 @@ import 'package:sqflite/sqflite.dart';
 
 class StudentDBRepository implements StudentRepository {
   @override
-  late DBlocal dbLocal;
+  late DBLocal dbLocal;
+
   StudentDBRepository() {
-    dbLocal = DBlocal(
+    dbLocal = DBLocal(
       table: "students",
     );
-
-    @override
-    // ignore: unused_element
-    Future<Student> find(int id) async {
-      Database database = await dbLocal.getConnection();
-      var data = await database.query(
-        dbLocal.table,
-        where: "id=",
-        whereArgs: [id],
-      );
-      database.close();
-      return Student.fromMap(data.first);
-    }
-
-    @override
-    Future<List<Student>> findAll() {
-      // TODO: implement findAll
-      throw UnimplementedError();
-    }
-
-    @override
-    Future<int> insert(Student entity) {
-      // TODO: implement insert
-      throw UnimplementedError();
-    }
-
-    @override
-    Future<int> remove(
-        {required String condition, required List conditionValues, P}) {
-      // TODO: implement remove
-      throw UnimplementedError();
-    }
-
-    @override
-    Future<int> uptade(
-        {required Student entity,
-        required String condition,
-        required List conditionValues}) {
-      // TODO: implement uptade
-      throw UnimplementedError();
-    }
   }
 
   @override
-  Future<Student> find(int id) {
-    // TODO: implement find
-    throw UnimplementedError();
+  Future<Student> find(int id) async {
+    Database database = await dbLocal.getConnection();
+    var data = await database.query(
+      dbLocal.table,
+      where: "id=",
+      whereArgs: [id],
+    );
+    database.close();
+    return Student.fromMap(data.first);
   }
 
   @override
-  Future<List<Student>> findAll() {
-    // TODO: implement findAll
-    throw UnimplementedError();
+  Future<List<Student>> findAll() async {
+    Database database = await dbLocal.getConnection();
+    var data = await database.query(
+      dbLocal.table,
+    );
+    database.close();
+    return data.map((student) => Student.fromMap(student)).toList();
   }
 
   @override
-  Future<int> insert(Student entity) {
-    // TODO: implement insert
-    throw UnimplementedError();
+  Future<int> insert(Student entity) async {
+    Database database = await dbLocal.getConnection();
+    int result = await database.insert(dbLocal.table, entity.toMap());
+    database.close();
+    return result;
   }
 
   @override
   Future<int> remove(
-      {required String condition, required List conditionValues, P}) {
-    // TODO: implement remove
-    throw UnimplementedError();
+      {required String conditions, required List conditionValues}) async {
+    Database database = await dbLocal.getConnection();
+    int result = await database.delete(dbLocal.table,
+        where: conditions, whereArgs: conditionValues);
+    database.close();
+    return result;
   }
 
   @override
-  Future<int> uptade(
+  Future<int> update(
       {required Student entity,
-      required String condition,
-      required List conditionValues}) {
-    // TODO: implement uptade
-    throw UnimplementedError();
+      required String conditions,
+      required List conditionValues}) async {
+    Database database = await dbLocal.getConnection();
+    int result = await database.update(
+      dbLocal.table,
+      entity.toMap(),
+      where: conditions,
+      whereArgs: conditionValues,
+    );
+    database.close();
+    return result;
   }
 }
+/*
+    @override
+    Future<int> remove(
+        {required String condition, required List conditionValues, P}) async {
+      Database database = await dbLocal.getConnection();
+      int result = await database.delete(dbLocal.table,
+          where: condition, whereArgs: conditionValues);
+      database.close();
+      return result;
+    }
+
+    @override
+    Future<int> update(
+        {required Student entity,
+        required String condition,
+        required List conditionValues}) async {
+      Database database = await dbLocal.getConnection();
+      int result = await database.update(
+        dbLocal.table,
+        entity.toMap(),
+        where: condition,
+        whereArgs: conditionValues,
+      );
+      database.close();
+      return result;
+    }
+  }*/
